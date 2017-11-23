@@ -1,0 +1,67 @@
+# controle-luz
+Nosso projeto tem o objetivo de acender lâmpadas apenas pressionando o controle remoto. Com o objetivo de facilitar a vida de seu cliente, o projeto é ideal para uma simples automação residencial. O cliente pode utilizar em sua casa sem muito esforço. 
+#include <IRremote.h>
+int laranja = 9;
+int verde = 13;
+int azul = 10;
+int RECV_PIN = 11;
+
+IRrecv irrecv(RECV_PIN);
+
+decode_results results;
+
+void setup()
+{
+  pinMode(laranja,OUTPUT);
+  pinMode(verde,OUTPUT);
+  pinMode(azul,OUTPUT);
+  Serial.begin(9600);
+  
+  Serial.println("Ativando IRin");
+  irrecv.enableIRIn(); // Start the receiver
+ 
+}
+
+void loop() {
+  if (irrecv.decode(&results)) {
+    Serial.println(results.value, HEX);
+    irrecv.resume(); // Receive the next value
+  if (results.value==0xFD00FF){
+    digitalWrite(laranja,HIGH);
+    digitalWrite(laranja,LOW);
+    digitalWrite(verde,LOW);
+    digitalWrite(azul,LOW);    
+  }  
+  else if (results.value==0xFD08F7){
+    digitalWrite(laranja,LOW);
+    digitalWrite(verde,HIGH);
+    digitalWrite(azul,HIGH);    
+  }  
+  else if (results.value==0xFD8877){
+    digitalWrite(laranja,LOW);
+    digitalWrite(verde,LOW);
+    digitalWrite(azul,HIGH);    
+  }  
+  else if (results.value==0xFD30CF){
+    digitalWrite(laranja,HIGH);
+    digitalWrite(verde,LOW);
+    digitalWrite(azul,LOW);    
+  }
+  else if (results.value==0xFD48B7){
+    digitalWrite(laranja,LOW);
+    digitalWrite(verde,HIGH);
+    digitalWrite(azul,LOW);    
+  }
+  else if (results.value==0xFD28D7){
+    digitalWrite(laranja,HIGH);
+    digitalWrite(verde,LOW);
+    digitalWrite(azul,HIGH);         
+  }
+  else if (results.value==0xFDA857){
+    digitalWrite(laranja,HIGH);
+    digitalWrite(verde,HIGH);
+    digitalWrite(azul,HIGH);    
+  }  
+  }  
+  delay(100);
+}
